@@ -1,0 +1,16 @@
+type Query {
+    me: User
+    user(id: String!): User
+}
+
+
+type Device {
+    id: String!
+}
+
+type User {
+    id: String!
+    email: String!
+    # TODO: Add devices
+    # devices: [Device!]!
+}
