@@ -1,16 +1,17 @@
 type Query {
     me: User
     user(id: String!): User
+    device(id: String!): Device
 }
 
-
-type Device {
-    id: String!
-}
 
 type User {
     id: String!
     email: String!
     # TODO: Add devices
     # devices: [Device!]!
+}
+
+type Device {
+    id: String!
 }
