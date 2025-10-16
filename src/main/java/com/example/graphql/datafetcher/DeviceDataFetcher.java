@@ -15,5 +15,5 @@ public class DeviceDataFetcher {
     public Device device(@InputArgument String id) {
         return new Device(id);
     }
-
+    
 }
