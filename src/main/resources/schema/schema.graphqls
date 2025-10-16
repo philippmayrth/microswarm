@@ -4,6 +4,10 @@ type Query {
     device(id: String!): Device
 }
 
+type Mutation {
+    # TODO: find proper return type
+    sendMQTTMessage(topic: String!, payload: String!): String!
+}
 
 type User {
     id: String!
