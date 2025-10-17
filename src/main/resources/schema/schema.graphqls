@@ -7,15 +7,21 @@ type Query {
 type Mutation {
     # TODO: find proper return type
     sendMQTTMessage(topic: String!, payload: String!): String!
+
+    addDevice(id: String!, userId: String!, name: String!): Device!
+    deleteDevice(id: String!): Boolean!
+    updateDeviceName(id: String!, name: String!): Device!
 }
 
 type User {
     id: String!
     email: String!
     # TODO: Add devices
-    # devices: [Device!]!
+    devices: [Device!]!
 }
 
 type Device {
     id: String!
+    name: String!
+    userId: String!
 }

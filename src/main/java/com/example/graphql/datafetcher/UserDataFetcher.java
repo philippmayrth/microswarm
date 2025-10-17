@@ -13,14 +13,15 @@ public class UserDataFetcher {
     
     @DgsQuery
     public User me() {
-        // Mockup user account
-        return new User("1", "user1@example.com");
+        return this.user("1");
     }
 
     @DgsQuery
     public User user(@InputArgument String id) {
-        // Mockup user account
-        return new User(id, "user" + id + "@example.com");
+        User user = new User();
+        user.setId(id);
+        user.setEmail("user" + id + "@example.com");
+        return user;
     }
 
 }
