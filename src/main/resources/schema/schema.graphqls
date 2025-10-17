@@ -9,7 +9,11 @@ type Mutation {
     deviceExec(deviceId: String!, pythonCode: String!, timeoutSeconds: Int!): String!
     # Restarts the device. No response possible. Check uptime in the heartbeat to see if it restarted.
     deviceRestart(deviceId: String!): String!
-    deviceRequestHeartbeat(deviceId: String!, timeoutSeconds: Int!): String!
+    deviceRequestHeartbeat(deviceId: String!, timeoutSeconds: Int!): Heartbeat!
+
+    # deviceListDir(deviceId: String!, path: String!, timeoutSeconds: Int!): [String!]!
+    # deviceDeleteFile(deviceId: String!, path: String!, timeoutSeconds: Int!): Boolean!
+    # deviceLoadFileFromURL(deviceId: String!, url: String!, path: String!, timeoutSeconds: Int!): Boolean!
 
     addDevice(id: String!, userId: String!, name: String!): Device!
     deleteDevice(id: String!): Boolean!
@@ -26,4 +30,22 @@ type Device {
     id: String!
     name: String!
     userId: String!
+}
+
+type HeartbeatMemory {
+    totalFlash: Int
+    freeFlash: Int
+    freeRam: Int
+    usedFlash: Int
+    totalRam: Int
+    allocatedRam: Int
+}
+
+type Heartbeat {
+    uptimeSeconds: Int!
+    firmware: String!
+    cpuTemp: Int
+    memory: HeartbeatMemory!
+    appName: String
+    appVersion: String
 }

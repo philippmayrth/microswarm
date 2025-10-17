@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MQTT {
+    public MqttClient client;
     private String brokerUrl;
-    private MqttClient client;
     private String username;
     private String password;
 
@@ -99,6 +99,41 @@ public class MQTT {
                 }
                 
                 client.unsubscribe(responseTopic);
+                
+                return response[0];
+            }
+        } catch (MqttException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+    
+    public String requestHeartbeat(String deviceId, int timeoutSeconds) {
+        final String commandTopic = "iot/" + deviceId + "/command";
+        final String heartbeatTopic = "iot/" + deviceId + "/_heartbeat";
+        final String[] response = new String[1];
+        final Object lock = new Object();
+        
+        try {
+            if (client != null && client.isConnected()) {
+                client.subscribe(heartbeatTopic, (receivedTopic, mqttMessage) -> {
+                    synchronized (lock) {
+                        response[0] = new String(mqttMessage.getPayload());
+                        lock.notify();
+                    }
+                });
+                
+                String heartbeatCommand = "{\"method\":\"_send_heartbeat\", \"params\": []}";
+                MqttMessage mqttMessage = new MqttMessage(heartbeatCommand.getBytes());
+                mqttMessage.setQos(1);
+                client.publish(commandTopic, mqttMessage);
+                
+                synchronized (lock) {
+                    lock.wait(timeoutSeconds * 1000L);
+                }
+                
+                client.unsubscribe(heartbeatTopic);
                 
                 return response[0];
             }
