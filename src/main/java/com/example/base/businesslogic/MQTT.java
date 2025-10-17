@@ -1,5 +1,8 @@
 package com.example.base.businesslogic;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -7,9 +10,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
-import java.io.IOException;
 
 public class MQTT {
     private String brokerUrl;
@@ -74,4 +74,39 @@ public class MQTT {
             e.printStackTrace();
         }
     }
+
+    public String invokeDeviceRPC(String deviceId, String message, int timeoutSeconds) {
+        final String topic = "iot/" + deviceId + "/command";
+        final String responseTopic = "iot/" + deviceId + "/response";
+        final String[] response = new String[1];
+        final Object lock = new Object();
+        
+        try {
+            if (client != null && client.isConnected()) {
+                client.subscribe(responseTopic, (receivedTopic, mqttMessage) -> {
+                    synchronized (lock) {
+                        response[0] = new String(mqttMessage.getPayload());
+                        lock.notify();
+                    }
+                });
+                
+                MqttMessage mqttMessage = new MqttMessage(message.getBytes());
+                mqttMessage.setQos(1);
+                client.publish(topic, mqttMessage);
+                
+                synchronized (lock) {
+                    lock.wait(timeoutSeconds * 1000L);
+                }
+                
+                client.unsubscribe(responseTopic);
+                
+                return response[0];
+            }
+        } catch (MqttException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
 }
+

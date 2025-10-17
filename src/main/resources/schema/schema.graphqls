@@ -5,8 +5,11 @@ type Query {
 }
 
 type Mutation {
-    # TODO: find proper return type
-    sendMQTTMessage(topic: String!, payload: String!): String!
+    deviceInvokeRPC(deviceId: String!, message: String!, timeoutSeconds: Int!): String!
+    deviceExec(deviceId: String!, pythonCode: String!, timeoutSeconds: Int!): String!
+    # Restarts the device. No response possible. Check uptime in the heartbeat to see if it restarted.
+    deviceRestart(deviceId: String!): String!
+    deviceRequestHeartbeat(deviceId: String!, timeoutSeconds: Int!): String!
 
     addDevice(id: String!, userId: String!, name: String!): Device!
     deleteDevice(id: String!): Boolean!
@@ -16,7 +19,6 @@ type Mutation {
 type User {
     id: String!
     email: String!
-    # TODO: Add devices
     devices: [Device!]!
 }
 
