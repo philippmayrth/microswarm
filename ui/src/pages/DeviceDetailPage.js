@@ -7,7 +7,7 @@ import DeviceOverview from '../components/DeviceOverview'
 
 function DeviceDetailPage() {
   const { id } = useParams()
-  const [tab, setTab] = useState(1)
+  const [tab, setTab] = useState(2)
 
   return (
     <div>
