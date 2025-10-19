@@ -1,8 +1,13 @@
-import InfoTile from './InfoTile';
+import InfoTile from './InfoCard';
 
 function App() {
   return (
-    <div className="App">
+    <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '10pt',
+        marginBottom: '20pt',
+      }}>
       <InfoTile deviceId="mockup-device-id" />
       <InfoTile deviceId="mockup-device-id" />
       <InfoTile deviceId="mockup-device-id" />
