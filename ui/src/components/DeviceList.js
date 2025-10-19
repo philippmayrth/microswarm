@@ -35,7 +35,7 @@ function App() {
             marginBottom: '20pt',
         }}>
             {devices.map(device => 
-                <InfoTile id={device.id} name={device.name} />
+                <InfoTile key={device.id} id={device.id} name={device.name} />
             )}
         </div>
     )

@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import { Card, Button, Link } from '@mui/material'
+import Heartbeat from './Heartbeat'
 
 function InfoTile({ id, name }) {
+
   return (
     <Card style={{
       width: 300,
@@ -11,6 +14,8 @@ function InfoTile({ id, name }) {
       <h1>{name}</h1>
       <br />
       (id: {id})
+
+      <Heartbeat deviceId={id} />
 
       <Link to={`/device/${id}`} style={{ textDecoration: 'none' }}>
         <Button variant="contained" color="primary">

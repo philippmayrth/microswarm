@@ -45,7 +45,7 @@ type Heartbeat {
     uptimeSeconds: Int!
     firmware: String!
     cpuTemp: Int
-    memory: HeartbeatMemory!
+    memory: HeartbeatMemory
     appName: String
     appVersion: String
 }

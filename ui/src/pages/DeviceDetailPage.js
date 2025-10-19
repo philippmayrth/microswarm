@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Tabs, Tab } from '@mui/material'
 import Shell from '../components/Shell'
 import Files from '../components/Files'
+import DeviceOverview from '../components/DeviceOverview'
 
 function DeviceDetailPage() {
   const { id } = useParams()
@@ -23,6 +24,7 @@ function DeviceDetailPage() {
         marginTop: 20,
         padding: 10,
       }}>
+        { tab === 0 && <DeviceOverview deviceId={id} /> }
         { tab === 1 && <Shell deviceId={id} /> }
         { tab === 2 && <Files deviceId={id} /> }
       </div>
