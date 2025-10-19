@@ -34,12 +34,9 @@ function App() {
             gap: '10pt',
             marginBottom: '20pt',
         }}>
-
-            {JSON.stringify(devices)}
-
-            <InfoTile deviceId="mockup-device-id" />
-            <InfoTile deviceId="mockup-device-id" />
-            <InfoTile deviceId="mockup-device-id" />
+            {devices.map(device => 
+                <InfoTile id={device.id} name={device.name} />
+            )}
         </div>
     )
 }

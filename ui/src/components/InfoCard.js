@@ -1,14 +1,16 @@
 import Card from '@mui/material/Card'
 
-function InfoTile({ deviceId }) {
+function InfoTile({ id, name }) {
   return (
     <Card style={{
-      width: 200,
-      height: 200,
+      width: 300,
+      minHeight: 200,
       margin: 20,
       padding: 5,
     }}>
-      Device Info tile {deviceId}
+      <h1>{name}</h1>
+      <br />
+      (id: {id}) 
     </Card>
   )
 }
