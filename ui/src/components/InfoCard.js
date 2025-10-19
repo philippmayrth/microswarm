@@ -1,4 +1,4 @@
-import Card from '@mui/material/Card'
+import { Card, Button, Link } from '@mui/material'
 
 function InfoTile({ id, name }) {
   return (
@@ -10,7 +10,13 @@ function InfoTile({ id, name }) {
     }}>
       <h1>{name}</h1>
       <br />
-      (id: {id}) 
+      (id: {id})
+
+      <Link to={`/device/${id}`} style={{ textDecoration: 'none' }}>
+        <Button variant="contained" color="primary">
+          View Details
+        </Button>
+      </Link>
     </Card>
   )
 }

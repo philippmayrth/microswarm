@@ -7,6 +7,7 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import MainPage from './pages/MainPage'
 import ErrorPage from './pages/ErrorPage'
+import DeviceDetailPage from './pages/DeviceDetailPage'
 
 
 // Hack to get react-router working wit MUI https://mui.com/material-ui/guides/routing/
@@ -38,6 +39,10 @@ const router = createHashRouter([
     element: <><MainPage /></>,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "/device/:id",
+    element: <DeviceDetailPage />,
+  }
 ])
 
 function App() {
