@@ -1,4 +1,5 @@
 import { Card, List, ListItem } from '@mui/material'
+import { useEffect } from 'react'
 
 function detectFileType(fileName) {
   const parts = fileName.split(".")
@@ -22,6 +23,14 @@ function FileItems({ file }) {
 }
 
 function Files({ deviceId }) {
+  // useEffect(() => {
+  //   const query = `
+  //   `
+  //   graphQLQuery({ query }).then(response => {
+  //     // Handle the response and update the files state
+  //   })
+  // }, [deviceId])
+
   const files = [
     {
       name: "main.py",
