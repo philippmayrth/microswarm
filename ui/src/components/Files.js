@@ -15,10 +15,25 @@ function detectFileType(fileName) {
   return mapping[ext] || "FILE"
 }
 
+function FileIcon({ fileType }) {
+  switch (fileType) {
+    case "DIR":
+      return "📁"
+    case "PYTHON":
+      return "⚡"
+    case "CONFIG":
+      return "⚙️"
+    default:
+      return "📄"
+  }
+}
+
 function FileItems({ file }) {
   return (
     <ListItem>
-      {file} ({detectFileType(file)})
+      <FileIcon fileType={detectFileType(file)} />
+      {" "}
+      {file}
     </ListItem>
   )
 }
@@ -52,8 +67,8 @@ function Files({ deviceId }) {
         const result = JSON.parse(response?.data?.deviceExec)
         const deviceResponse = result?.result?.output || "[]"
         // The device also encodes results of executed code as JSON strings
-        console.log({deviceResponse})
-        
+        console.log({ deviceResponse })
+
         const listArray = JSON.parse(deviceResponse)
         setFiles(listArray)
       })
@@ -63,21 +78,21 @@ function Files({ deviceId }) {
         setFiles([])
       })
   }, [deviceId])
-  
+
   if (loading) return <>Loading files...</>
 
   return (
-    
+
     <Card style={{
-        padding: 10,
+      padding: 10,
     }}>
-        Shell for device { deviceId }
-       
-        <List style={{ maxHeight: 400, overflow: "auto" }}>
-          {Array.isArray(files) && files.map((file, index) => 
-            <FileItems key={index} file={file} />
-          )}
-        </List>
+      Shell for device {deviceId}
+
+      <List style={{ maxHeight: 400, overflow: "auto" }}>
+        {Array.isArray(files) && files.map((file, index) =>
+          <FileItems key={index} file={file} />
+        )}
+      </List>
 
     </Card>
   )
