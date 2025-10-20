@@ -40,12 +40,8 @@ function FileItems({ file, active, onClick }) {
   )
 }
 
-function Files({ deviceId }) {
-  const [files, setFiles] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [activeFile, setActiveFile] = useState(null)
 
-  const runRemoteCode = (command) => {
+  const runRemoteCode = ({ command, deviceId }) => {
     const query = `
       mutation Exec($deviceId: String!, $pythonCode: String!, $timeoutSeconds: Int!) {
         deviceExec(
@@ -57,13 +53,45 @@ function Files({ deviceId }) {
     return graphQLQuery({ query, variables: { deviceId, pythonCode: command, timeoutSeconds: 10 } })
   }
 
+function FileViewer({ path, deviceId }) {
+  const [fileContent, setFileContent] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true)
+    runRemoteCode({command: `open('${path}').read()`, deviceId}).then(response => {
+      console.log({ response })
+      const deviceResponse = JSON.parse(response?.data?.deviceExec)
+      const content = deviceResponse?.result?.output || "<Empty File>"
+      deviceResponse && setFileContent(content)
+      setLoading(false)
+    })
+  }, [path])
+
+  return (
+    <div>
+      <TextareaAutosize
+        minRows={10}
+        style={{ width: "100%", marginTop: 10 }}
+        value={fileContent ? fileContent : "<Loading...>"}
+        readOnly
+      />
+    </div>
+  )
+}
+
+function Files({ deviceId }) {
+  const [files, setFiles] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [activeFile, setActiveFile] = useState(null)
+
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
   useEffect(() => {
     setLoading(true)
-    runRemoteCode("import os; import json") // Prepare environment
+    runRemoteCode({ command: "import os; import json", deviceId })
       .then(() => delay(1000)) // Wait 1 second after first command completes
-      .then(() => runRemoteCode("json.dumps(os.listdir())"))
+      .then(() => runRemoteCode({ command: "json.dumps(os.listdir())", deviceId }))
       .then(response => {
         setLoading(false)
         // The Java backend encodes RPC calls to the device as JSON strings
@@ -85,7 +113,6 @@ function Files({ deviceId }) {
   if (loading) return <>Loading files...</>
 
   return (
-
     <Card style={{
       padding: 10,
     }}>
@@ -106,13 +133,9 @@ function Files({ deviceId }) {
           }} />
         )}
       </List>
+    
+      <FileViewer path={activeFile} deviceId={deviceId} />
 
-      <TextareaAutosize
-        minRows={10}
-        style={{ width: "100%", marginTop: 10 }}
-        value={activeFile ? activeFile.content : ""}
-        readOnly
-      />
 
     </Card>
   )
