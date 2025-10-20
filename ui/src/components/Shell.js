@@ -37,12 +37,45 @@ function Shell({ deviceId }) {
         )
       }`
     graphQLQuery({ query, variables: { deviceId, pythonCode: command, timeoutSeconds: 10 } }).then(response => {
-      const output = response?.data?.deviceExec || response?.errors?.[0]?.message || "No response"
-      setHistory(prev => [...prev, { command, output }])
+      if (response?.errors && response.errors.length > 0) {
+        const errorMessage = response.errors[0].message
+        setHistory(prev => [...prev, { command, output: errorMessage, isError: true }])
+        setCommand("")
+        setIsLoading(false)
+        return
+      }
+      
+      const rawOutput = response?.data?.deviceExec || "No response"
+      
+      let parsedResult = null
+      let isError = false
+      let displayOutput = rawOutput
+      
+      try {
+        const parsed = JSON.parse(rawOutput)
+        if (parsed.result) {
+          parsedResult = parsed.result
+          if (parsedResult.success && parsedResult.output !== null) {
+            displayOutput = parsedResult.output
+            isError = false
+          } else if (!parsedResult.success && parsedResult.error) {
+            displayOutput = parsedResult.error
+            isError = true
+          }
+        }
+      } catch (e) {
+        // Check server side error messages from graphql api
+        if (rawOutput.includes("Exception") || rawOutput.includes("Error") || rawOutput.includes("did not respond")) {
+          isError = true
+        }
+        displayOutput = rawOutput
+      }
+      
+      setHistory(prev => [...prev, { command, output: displayOutput, isError }])
       setCommand("")
       setIsLoading(false)
     }).catch(error => {
-      setHistory(prev => [...prev, { command, output: `Error: ${error.message}` }])
+      setHistory(prev => [...prev, { command, output: `Error: ${error.message}`, isError: true }])
       setIsLoading(false)
     })
   }
@@ -51,10 +84,6 @@ function Shell({ deviceId }) {
     <Card style={{
       padding: 10,
     }}>
-    TODO: Highlight exceptions in red
-    <br />
-    TODO: Print result instead of full JSON in case of success
-    <br />
     TODO: Add RPC
     <br />
 
@@ -79,7 +108,12 @@ function Shell({ deviceId }) {
         {history.map((entry, index) => (
           <div key={index} style={{ marginBottom: 15 }}>
             <div style={{ color: "#4ec9b0" }}>{">>> "}{entry.command}</div>
-            <div style={{ whiteSpace: "pre-wrap", marginTop: 5, paddingLeft: 10 }}>
+            <div style={{ 
+              whiteSpace: "pre-wrap", 
+              marginTop: 5, 
+              paddingLeft: 10,
+              color: entry.isError ? "#ff6b6b" : "#d4d4d4"
+            }}>
               {entry.output}
             </div>
           </div>
