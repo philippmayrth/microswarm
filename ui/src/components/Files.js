@@ -30,7 +30,9 @@ function FileIcon({ fileType }) {
 
 function FileItems({ file, active, onClick }) {
   return (
-    <ListItem onClick={onClick}>
+    <ListItem onClick={onClick} style={{
+      cursor: 'pointer',
+    }}>
       <FileIcon fileType={detectFileType(file)} />
       {" "}
       {active ? <strong>{file}</strong> : file}

@@ -48,7 +48,6 @@ const router = createHashRouter([
 function App() {
   return (
     <div className="App">
-    TODO: Add navigation bar
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>

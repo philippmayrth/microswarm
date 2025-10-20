@@ -6,11 +6,7 @@ function DeviceOverview({ deviceId }) {
     <Card style={{
         padding: 10,
     }}>
-      Overview for device { deviceId }
-    
     <b>
-    
-    <br />
     TODO: Add graphs
     </b>
 
