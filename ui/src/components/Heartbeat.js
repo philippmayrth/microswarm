@@ -41,7 +41,7 @@ function Heartbeat({ deviceId}) {
       }
     }
     `
-    graphQLQuery({ query, variables: { deviceId: deviceId, timeoutSeconds: 3 } }).then(response => {
+    graphQLQuery({ query, variables: { deviceId: deviceId, timeoutSeconds: 10 } }).then(response => {
       setLoading(false)
       setHeartbeat(response?.data?.deviceRequestHeartbeat ?? null)
     })

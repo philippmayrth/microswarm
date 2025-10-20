@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Card, List, ListItem, TextareaAutosize } from '@mui/material'
+import { Button, Card, List, ListItem } from '@mui/material'
+import Editor from "@monaco-editor/react"
 import { graphQLQuery } from '../gql'
 
 function detectFileType(fileName) {
@@ -41,26 +42,59 @@ function FileItems({ file, active, onClick }) {
 }
 
 
-  const runRemoteCode = ({ command, deviceId }) => {
-    const query = `
-      mutation Exec($deviceId: String!, $pythonCode: String!, $timeoutSeconds: Int!) {
-        deviceExec(
-          deviceId: $deviceId,
-          pythonCode: $pythonCode,
-          timeoutSeconds: $timeoutSeconds,
-        )
-      }`
-    return graphQLQuery({ query, variables: { deviceId, pythonCode: command, timeoutSeconds: 10 } })
+const runRemoteCode = ({ command, deviceId }) => {
+  const query = `
+    mutation Exec($deviceId: String!, $pythonCode: String!, $timeoutSeconds: Int!) {
+      deviceExec(
+        deviceId: $deviceId,
+        pythonCode: $pythonCode,
+        timeoutSeconds: $timeoutSeconds,
+      )
+    }`
+  return graphQLQuery({ query, variables: { deviceId, pythonCode: command, timeoutSeconds: 10 } })
+}
+
+const runRemoteCommand = ({ method, deviceId, params }) => {
+  if (!Array.isArray(params)) {
+    console.log("WARNING: Params is not an array, defaulting to empty array")
+    params = []
   }
+  const message = JSON.stringify({
+    method: method,
+    params: params
+  })
+  const query = `
+    mutation RunCommand($message: String!, $deviceId: String!, $timeoutSeconds: Int!) {
+      deviceInvokeRPC(deviceId: $deviceId,
+      message: $message,
+      timeoutSeconds: $timeoutSeconds)
+    }`
+  return graphQLQuery({ query, variables: { message, deviceId, timeoutSeconds: 10 } })
+}
+
+const saveFile = ({ path, content, deviceId }) => {
+  const b64encodedContent = btoa(content)
+  return runRemoteCommand({ method: "_upload_file", deviceId, params: [path, b64encodedContent] })
+}
+
+function getLanguageFromPath(path) {
+  const defaultLanguage = "python"
+  if (!path) return defaultLanguage
+  if (path.endsWith(".py")) return "python"
+  if (path.endsWith(".json")) return "json"
+  return defaultLanguage
+}
 
 function FileViewer({ path, deviceId }) {
   const [fileContent, setFileContent] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
+    if (!path) return;
     setLoading(true)
+    setFileContent(null)
     runRemoteCode({command: `open('${path}').read()`, deviceId}).then(response => {
-      console.log({ response })
       const deviceResponse = JSON.parse(response?.data?.deviceExec)
       const content = deviceResponse?.result?.output || "<Empty File>"
       deviceResponse && setFileContent(content)
@@ -68,13 +102,23 @@ function FileViewer({ path, deviceId }) {
     })
   }, [path])
 
+  if (!path) return <div style={{marginTop: 20, color: '#888'}}>Select a file to view its contents.</div>;
+  if (loading) return <div style={{marginTop: 20}}>Loading file...</div>;
+
   return (
-    <div>
-      <TextareaAutosize
-        minRows={10}
-        style={{ width: "100%", marginTop: 10 }}
-        value={fileContent ? fileContent : "<Loading...>"}
-        readOnly
+    <div style={{marginTop: 20}}>
+    <Button disabled={saving} variant="contained" onClick={() => {
+      setSaving(true)
+      saveFile({ path, content: fileContent, deviceId }).then(response => {
+        setSaving(false)
+      })
+      }}>{saving ? "Saving..." : "Save to device"}</Button>
+      <Editor
+        height="400px"
+        language={getLanguageFromPath(path)}
+        value={fileContent ?? ''}
+        onChange={(value) => setFileContent(value)}
+        options={{ readOnly: false , minimap: { enabled: true } }}
       />
     </div>
   )
@@ -110,20 +154,12 @@ function Files({ deviceId }) {
       })
   }, [deviceId])
 
-  if (loading) return <>Loading files...</>
+  if (loading) return <>⏳ Loading files...</>
 
   return (
     <Card style={{
       padding: 10,
     }}>
-    TODO: Add upload functionality
-    <br />
-    TODO: Add delete functionality
-    <br />
-    TODO: Add edit functionality
-    <br />
-    TODO: Add syntax highlighting
-
       <List style={{ maxHeight: 400, overflow: "auto" }}>
         {Array.isArray(files) && files.map((file, index) =>
           <FileItems key={index} file={file} active={activeFile === file} onClick={() => {
