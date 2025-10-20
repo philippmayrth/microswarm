@@ -12,8 +12,6 @@ function DeviceOverview({ deviceId }) {
     
     <br />
     TODO: Add graphs
-    <br />
-    TODO: Make stats prettier
     </b>
 
       <Heartbeat deviceId={deviceId} />

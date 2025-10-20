@@ -8,13 +8,16 @@ function InfoTile({ id, name }) {
       width: 300,
       minHeight: 200,
       margin: 20,
-      padding: 5,
+      padding: 10,
     }}>
       <h1>{name}</h1>
+      <i>{id}</i>
       <br />
-      (id: {id})
+      <br />
 
       <Heartbeat deviceId={id} />
+
+      <br />
 
       <Link to={`/device/${id}`} style={{ textDecoration: 'none' }}>
         <Button variant="contained" color="primary">

@@ -36,18 +36,19 @@ function Heartbeat({ deviceId}) {
   }, [deviceId])
 
   return (
-    <div>
+    <div style={{ fontFamily: 'monospace', whiteSpace: 'pre' }}>
       {heartbeat && (<>
         <div>🟢 Online </div>
+        <br />
 
         {heartbeat?.firmware?.includes("recovery") && <div>⚠️ Recovery Mode Active</div>}
 
-        <div>Uptime: {Math.floor(heartbeat.uptimeSeconds / 60)} minutes</div>
-        <div>Firmware: {heartbeat.firmware}</div>
-        <div>CPU Temp: {heartbeat.cpuTemp} °C</div>
-        <div>App: {heartbeat.appName} v{heartbeat.appVersion}</div>
-        <div>Memory - RAM: {Math.floor(heartbeat.memory?.allocatedRam / 1024)} KB allocated / {Math.floor(heartbeat.memory?.totalRam / 1024)} KB total</div>
-        <div>Memory - Flash: {Math.floor(heartbeat.memory?.usedFlash / 1024)} KB used / {Math.floor(heartbeat.memory?.totalFlash / 1024)} KB total</div>
+        <div>⏱️ Uptime:       {Math.floor(heartbeat.uptimeSeconds / 60)} minutes</div>
+        <div>💾 Firmware:     {heartbeat.firmware}</div>
+        <div>🌡️ CPU Temp:     {heartbeat.cpuTemp} °C</div>
+        <div>📱 App:          {heartbeat.appName} v{heartbeat.appVersion}</div>
+        <div>🧠 RAM:          {Math.floor(heartbeat.memory?.allocatedRam / 1024)} KB / {Math.floor(heartbeat.memory?.totalRam / 1024)} KB</div>
+        <div>💿 Flash:        {Math.floor(heartbeat.memory?.usedFlash / 1024)} KB / {Math.floor(heartbeat.memory?.totalFlash / 1024)} KB</div>
       </>)}
     
     {!heartbeat && !loading && (
