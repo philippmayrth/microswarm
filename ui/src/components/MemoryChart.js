@@ -15,13 +15,14 @@ const data = [
     <div
       style={{
         width: "100%",
-        minHeight: "300px",
+        minHeight: "200px",
         padding: "10px",
-        justifyContent: "space-around",
-        alignItems: "stretch",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <PieChart responsive style={{ height: "calc(100% - 20px)", width: "33%", maxWidth: "300px", aspectRatio: 1 }}>
+      <PieChart width={250} height={250}>
         <MyPie data={data} />
         <Label position="center" fill="#666">
           {label}

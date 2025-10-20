@@ -40,24 +40,30 @@ function DeviceOverview({ deviceId }) {
     }}>
       <Heartbeat deviceId={deviceId} />
 
-      {loading ? "⏳ Loading charts" : heartbeat && <div style={{
+      {loading ? "⏳ Loading charts" : heartbeat && <><div style={{
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
         width: "100%",
-        gap: "20px",
+        gap: "10px",
         marginTop: "20px",
       }}>
-        <div style={{ flex: "1 1 300px", minWidth: "300px" }}>
+        <div style={{ flex: "0 0 auto", minWidth: "250px" }}>
           <MemoryChart label="RAM" free={heartbeat?.memory?.freeRam} used={heartbeat?.memory?.usedRam} />
         </div>
-        <div style={{ flex: "1 1 300px", minWidth: "300px" }}>
+        <div style={{ flex: "0 0 auto", minWidth: "250px" }}>
           <MemoryChart label="Flash" free={heartbeat?.memory?.freeFlash} used={heartbeat?.memory?.usedFlash} />
         </div>
-        <div style={{ flex: "1 1 300px", minWidth: "300px" }}>
-          <CPUTempChart temperature={heartbeat?.cpuTemp} />
-        </div>
-      </div>}
+      </div>
+      <div style={{
+        display: "flex",
+        justifyContent: "flex-start",
+        marginTop: 30,
+        paddingLeft: 40, // center under teh ram chart so it looks better
+      }}>
+        <CPUTempChart temperature={heartbeat?.cpuTemp} />
+      </div>
+    </>}
 
     </Card >
   )
