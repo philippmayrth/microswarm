@@ -49,7 +49,7 @@ function DeviceOverview({ deviceId }) {
         marginTop: "20px",
       }}>
         <div style={{ flex: "0 0 auto", minWidth: "250px" }}>
-          <MemoryChart label="RAM" free={heartbeat?.memory?.allocatedRam} total={heartbeat?.memory?.totalRam} />
+          <MemoryChart label="RAM" free={heartbeat?.memory?.freeRam} total={heartbeat?.memory?.totalRam} />
         </div>
         <div style={{ flex: "0 0 auto", minWidth: "250px" }}>
           <MemoryChart label="Flash" free={heartbeat?.memory?.freeFlash} total={heartbeat?.memory?.totalFlash} />

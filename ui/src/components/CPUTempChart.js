@@ -1,3 +1,4 @@
+// Needle chart taken from the official recharts documentation at https://recharts.github.io/en-US/examples/PieChartWithNeedle with few modifications
 import { Pie, PieChart } from "recharts"
 
 const RADIAN = Math.PI / 180

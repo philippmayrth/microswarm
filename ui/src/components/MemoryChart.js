@@ -8,8 +8,8 @@ const MyPie = ({ data }) => (
 export default function MemoryChart({ label, free, total}) {
   const used = total - free
   const data = [
-    { name: "Used", value: used, fill: "#00C49F" },
-    { name: "Free", value: free, fill: "#0088FE" },
+    { name: "Used", value: used, fill: "#2196f3" },
+    { name: "Free", value: free, fill: "#9e9e9e" },
   ]
 
   return (
