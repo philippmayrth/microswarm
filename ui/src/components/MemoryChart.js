@@ -5,11 +5,12 @@ const MyPie = ({ data }) => (
   <Pie data={data} dataKey="value" nameKey="name" outerRadius="80%" innerRadius="60%" isAnimationActive={false} />
 );
 
-export default function MemoryChart({ label, free, used }) {
-const data = [
-  { name: "Free", value: free, fill: "#0088FE" },
-  { name: "Used", value: used, fill: "#00C49F" },
-]
+export default function MemoryChart({ label, free, total}) {
+  const used = total - free
+  const data = [
+    { name: "Used", value: used, fill: "#00C49F" },
+    { name: "Free", value: free, fill: "#0088FE" },
+  ]
 
   return (
     <div

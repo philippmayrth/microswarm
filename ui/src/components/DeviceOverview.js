@@ -49,10 +49,10 @@ function DeviceOverview({ deviceId }) {
         marginTop: "20px",
       }}>
         <div style={{ flex: "0 0 auto", minWidth: "250px" }}>
-          <MemoryChart label="RAM" free={heartbeat?.memory?.freeRam} used={heartbeat?.memory?.usedRam} />
+          <MemoryChart label="RAM" free={heartbeat?.memory?.allocatedRam} total={heartbeat?.memory?.totalRam} />
         </div>
         <div style={{ flex: "0 0 auto", minWidth: "250px" }}>
-          <MemoryChart label="Flash" free={heartbeat?.memory?.freeFlash} used={heartbeat?.memory?.usedFlash} />
+          <MemoryChart label="Flash" free={heartbeat?.memory?.freeFlash} total={heartbeat?.memory?.totalFlash} />
         </div>
       </div>
       <div style={{
@@ -61,7 +61,7 @@ function DeviceOverview({ deviceId }) {
         marginTop: 30,
         paddingLeft: 40, // center under teh ram chart so it looks better
       }}>
-        <CPUTempChart temperature={heartbeat?.cpuTemp} />
+        <CPUTempChart temperature={heartbeat?.cpuTemp} isAnimationActive={false} />
       </div>
     </>}
 

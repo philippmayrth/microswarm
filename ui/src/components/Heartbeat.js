@@ -5,6 +5,19 @@ function Heartbeat({ deviceId}) {
   const [heartbeat, setHeartbeat] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const formatUptime = (seconds) => {
+    const days = Math.floor(seconds / 86400)
+    const hours = Math.floor((seconds % 86400) / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    
+    const parts = []
+    if (days > 0) parts.push(`${days}d`)
+    if (hours > 0) parts.push(`${hours}h`)
+    if (minutes > 0 || parts.length === 0) parts.push(`${minutes}m`)
+    
+    return parts.join(' ')
+  }
+
   useEffect(() => {
     setLoading(true)
     const query = `
@@ -43,7 +56,7 @@ function Heartbeat({ deviceId}) {
 
         {heartbeat?.firmware?.includes("recovery") && <div>⚠️ Recovery Mode Active</div>}
 
-        <div>⏱️ Uptime:       {Math.floor(heartbeat.uptimeSeconds / 60)} minutes</div>
+        <div>⏱️ Uptime:       {formatUptime(heartbeat.uptimeSeconds)}</div>
         <div>💾 Firmware:     {heartbeat.firmware}</div>
         <div>🌡️ CPU Temp:     {heartbeat.cpuTemp} °C</div>
         <div>📱 App:          {heartbeat.appName} v{heartbeat.appVersion}</div>
