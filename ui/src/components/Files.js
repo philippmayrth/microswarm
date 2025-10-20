@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Card, List, ListItem } from '@mui/material'
+import { Card, List, ListItem, TextareaAutosize } from '@mui/material'
 import { graphQLQuery } from '../gql'
 
 function detectFileType(fileName) {
@@ -28,12 +28,12 @@ function FileIcon({ fileType }) {
   }
 }
 
-function FileItems({ file }) {
+function FileItems({ file, active, onClick }) {
   return (
-    <ListItem>
+    <ListItem onClick={onClick}>
       <FileIcon fileType={detectFileType(file)} />
       {" "}
-      {file}
+      {active ? <strong>{file}</strong> : file}
     </ListItem>
   )
 }
@@ -41,6 +41,7 @@ function FileItems({ file }) {
 function Files({ deviceId }) {
   const [files, setFiles] = useState([])
   const [loading, setLoading] = useState(false)
+  const [activeFile, setActiveFile] = useState(null)
 
   const runRemoteCode = (command) => {
     const query = `
@@ -86,13 +87,30 @@ function Files({ deviceId }) {
     <Card style={{
       padding: 10,
     }}>
-      Shell for device {deviceId}
+    TODO: Add upload functionality
+    <br />
+    TODO: Add delete functionality
+    <br />
+    TODO: Add edit functionality
+    <br />
+    TODO: Add syntax highlighting
 
       <List style={{ maxHeight: 400, overflow: "auto" }}>
         {Array.isArray(files) && files.map((file, index) =>
-          <FileItems key={index} file={file} />
+          <FileItems key={index} file={file} active={activeFile === file} onClick={() => {
+            if (detectFileType(file) !== "DIR") {
+              setActiveFile(file)
+            }
+          }} />
         )}
       </List>
+
+      <TextareaAutosize
+        minRows={10}
+        style={{ width: "100%", marginTop: 10 }}
+        value={activeFile ? activeFile.content : ""}
+        readOnly
+      />
 
     </Card>
   )

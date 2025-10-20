@@ -7,6 +7,14 @@ function DeviceOverview({ deviceId }) {
         padding: 10,
     }}>
       Overview for device { deviceId }
+    
+    <b>
+    
+    <br />
+    TODO: Add graphs
+    <br />
+    TODO: Make stats prettier
+    </b>
 
       <Heartbeat deviceId={deviceId} />
 

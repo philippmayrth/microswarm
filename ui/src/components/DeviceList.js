@@ -34,6 +34,13 @@ function App() {
             gap: '10pt',
             marginBottom: '20pt',
         }}>
+      TODO: Edit device name
+      <br />
+      TODO: Add device feature
+      <br />
+      TODO: Delete device feature
+      <br />
+
             {devices.map(device => 
                 <InfoTile key={device.id} id={device.id} name={device.name} />
             )}

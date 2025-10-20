@@ -51,6 +51,13 @@ function Shell({ deviceId }) {
     <Card style={{
       padding: 10,
     }}>
+    TODO: Highlight exceptions in red
+    <br />
+    TODO: Print result instead of full JSON in case of success
+    <br />
+    TODO: Add RPC
+    <br />
+
       <RestartButton deviceId={deviceId} />
 
       <div style={{
