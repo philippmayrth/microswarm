@@ -1,7 +1,11 @@
 import { Card, Button, Link } from '@mui/material'
 import Heartbeat from './Heartbeat'
 
-function InfoTile({ id, name }) {
+function InfoTile({ id, name, editMode, onDelete }) {
+  const handleDelete = (event) => {
+    event.stopPropagation();
+    onDelete(id);
+  };
 
   return (
     <Card style={{
@@ -24,6 +28,11 @@ function InfoTile({ id, name }) {
           View Details
         </Button>
       </Link>
+      {editMode && (
+        <Button variant="contained" color="error" onClick={handleDelete} style={{ marginLeft: 10 }}>
+          DELETE
+        </Button>
+      )}
     </Card>
   )
 }

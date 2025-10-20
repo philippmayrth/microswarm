@@ -29,8 +29,8 @@ public class DeviceDataFetcher {
     @DgsMutation
     public Device addDevice(
             @InputArgument String id,
-            @InputArgument String userId,
             @InputArgument String name) {
+        String userId = "1"; // Default user ID KISS, for now
         return db.addDevice(id, userId, name);
     }
     
