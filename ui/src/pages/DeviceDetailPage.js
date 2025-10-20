@@ -9,7 +9,7 @@ import { graphQLQuery } from '../gql'
 
 function DeviceDetailPage() {
   const { id } = useParams()
-  const [tab, setTab] = useState(2)
+  const [tab, setTab] = useState(0)
   const [deviceMasterData, setDeviceMasterData] = useState(null)
 
   useEffect(() => {
