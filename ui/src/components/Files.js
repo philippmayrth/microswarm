@@ -157,24 +157,28 @@ function Files({ deviceId }) {
   if (loading) return <>⏳ Loading files...</>
 
   return (
-    <Card style={{
-      padding: 10,
-    }}>
-      <List style={{ maxHeight: 400, overflow: "auto" }}>
-        {Array.isArray(files) && files.map((file, index) =>
-          <FileItems key={index} file={file} active={activeFile === file} onClick={() => {
-            if (detectFileType(file) !== "DIR") {
-              setActiveFile(file)
-            }
-          }} />
-        )}
-      </List>
-    
-      <FileViewer path={activeFile} deviceId={deviceId} />
-
-
+    <Card style={{ padding: 10 }}>
+      <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+        <List style={{ maxHeight: 400, overflow: "auto", minWidth: 200, flex: "0 0 200px" }}>
+          {Array.isArray(files) && files.map((file, index) => (
+            <FileItems
+              key={index}
+              file={file}
+              active={activeFile === file}
+              onClick={() => {
+                if (detectFileType(file) !== "DIR") {
+                  setActiveFile(file);
+                }
+              }}
+            />
+          ))}
+        </List>
+        <div style={{ flex: 1, minWidth: 320 }}>
+          <FileViewer path={activeFile} deviceId={deviceId} />
+        </div>
+      </div>
     </Card>
-  )
+  );
 }
 
 export default Files

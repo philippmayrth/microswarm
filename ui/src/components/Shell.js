@@ -84,9 +84,6 @@ function Shell({ deviceId }) {
     <Card style={{
       padding: 10,
     }}>
-    TODO: Add RPC
-    <br />
-
       <RestartButton deviceId={deviceId} />
 
       <div style={{
